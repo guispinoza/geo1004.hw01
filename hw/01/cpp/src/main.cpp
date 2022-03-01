@@ -8,6 +8,8 @@
 
 #include "Gmap.h"
 
+
+
 int main(int argc, const char * argv[]) {
     std::string file_in = "cube.obj";
     std::string file_out_obj = "D:/Geomatics/GEO_1004/geo1004_hw1/hw/01/data/torus_triangulated.obj";
@@ -44,23 +46,39 @@ int main(int argc, const char * argv[]) {
                 else vertices.push_back(Vertex());
             }
             if (word == "f") {
-                std::vector<int> vertex_indexes;
-                while (iss >> word) vertex_indexes.push_back(std::stoi(word)-1); //stoi converts str to int
-                OBJ_faces.push_back(vertex_indexes);
+                std::vector<int> vertex_indices;
+                while (iss >> word) vertex_indices.push_back(std::stoi(word)-1); //stoi converts str to int
+                if (vertex_indices.size() == 4) OBJ_faces.push_back(vertex_indices);
             }
         }
         stream_in.close();
     }
 
-    for (Vertex i: vertices) {
+
+  std::cout << "vertices.size() = " << vertices.size() << "\n";
+  std::cout << "darts.size() = " << darts.size() << "\n";
+  std::cout << "edges.size() = " << edges.size() << "\n";
+  std::cout << "faces.size() = " << faces.size() << "\n";
+  std::cout << "volumes.size() = " << volumes.size() << "\n";
+  std::cout << "OBJ_faces.size() = " << OBJ_faces.size() << "\n";
+
+
+
+
+  for (Vertex i: vertices) {
         std::cout << i.point << std::endl;
 
         }
+
+
         // ## Construct generalised map using the structures from Gmap.h ##
 
         // ## Output generalised map to CSV ##
 
-        // ## Create triangles from the darts ##
+  // ## Output generalised map to CSV ##
+
+
+  // ## Create triangles from the darts ##
 
         // ## Write triangles to obj ##
 
