@@ -42,7 +42,7 @@ struct Dart {
     int v;
     int e;
     int f;
-  // involutions: 4 for a 3D map
+    // involutions: 4 for a 3D map
     int a0;
     int a1;
     int a2;
@@ -53,25 +53,25 @@ struct Dart {
 };
 
 struct Vertex {
-  // the coordinates of this vertex:
+    // the coordinates of this vertex:
 
-  Point point;
+    Point point;
 
 
-  //int coords; //to create the unique key for the unordered map by concatenating the xyz
+    //int coords; //to create the unique key for the unordered map by concatenating the xyz
 
-  // constructor without arguments
-  Vertex() : point(Point()) 
-  {}
+    // constructor without arguments
+    Vertex() : point(Point())
+    {}
 
-  // constructor with x,y,z arguments to immediately initialise the point member on this Vertex.
-  Vertex(const double &x, const double &y, const double &z) : point(Point(x,y,z)){}
+    // constructor with x,y,z arguments to immediately initialise the point member on this Vertex.
+    Vertex(const double &x, const double &y, const double &z) : point(Point(x,y,z)){}
 
-  // a dart incident to this Vertex:
-  int dart_v;
+    // a dart incident to this Vertex:
+    int dart_v;
 
-  //function to check for duplicates by converting the coords unique key
-   std::string coords_concat(const Point) {
+    //function to check for duplicates by converting the coords unique key
+    std::string coords_concat(const Point) {
       std::string str_x = std::to_string(point.x);
       std::string str_y = std::to_string(point.y);
       std::string str_z = std::to_string(point.z);
@@ -79,16 +79,16 @@ struct Vertex {
       std:: string s_xyz = str_x + str_y + str_z;
 
       return s_xyz;
-  }
+    }
 
-  int retrieve (const int x){
+    int retrieve (const int x){
 
-   }
+    }
 
     bool operator==(const Vertex &other) const {
-        return (point.x==other.point.x
-                && point.y ==other.point.y
-                && point.z == other.point.z);
+      return (point.x==other.point.x
+              && point.y ==other.point.y
+              && point.z == other.point.z);
     }
 };
 
@@ -102,9 +102,9 @@ namespace std {
 //            using std::hash;
 //            using std::string;
 
-            return ((hash<double>()(k.point.x)
-                     ^ (hash<double>()(k.point.y) << 1)) >> 1)
-                   ^ (hash<double>()(k.point.z) << 1);
+          return ((hash<double>()(k.point.x)
+                   ^ (hash<double>()(k.point.y) << 1)) >> 1)
+                 ^ (hash<double>()(k.point.z) << 1);
         }
     };
 }
@@ -143,45 +143,46 @@ struct Edge {
 
     // function to compute the barycenter for this Edge (needed for triangulation output):
 
+
     // Point barycenter() {}
 
     int concat(const int &start, const int &end) {
 
-        // covert seperately into string
-        std::string v1 = std::to_string(start);
-        std::string v2 = std::to_string(end);
+      // covert seperately into string
+      std::string v1 = std::to_string(start);
+      std::string v2 = std::to_string(end);
 
-        //concatenate the 2 strings
-        std::string v1_v2 = v1 + v2;
+      //concatenate the 2 strings
+      std::string v1_v2 = v1 + v2;
 
-        // convert the string to int
-        int e = stoi(v1_v2);
+      // convert the string to int
+      int e = stoi(v1_v2);
 
-        return e;
+      return e;
     }
 
     int inv_concat(const int &start, const int &end) {
 
-        // covert seperately into string
-        std::string v1 = std::to_string(start);
-        std::string v2 = std::to_string(end);
+      // covert seperately into string
+      std::string v1 = std::to_string(start);
+      std::string v2 = std::to_string(end);
 
-        //concatenate the 2 strings into the inverse
-        std::string v2_v1 = v2 + v1;
+      //concatenate the 2 strings into the inverse
+      std::string v2_v1 = v2 + v1;
 
-        // convert the string to int
-        int e_inv = stoi(v2_v1);
+      // convert the string to int
+      int e_inv = stoi(v2_v1);
 
-        return e_inv;
+      return e_inv;
     }
 
 };
 
 struct Face {
     int a,b,c,d;
-  // a dart incident to this Face:
+    // a dart incident to this Face:
 
-  int face_concat(const int &a, const int &b, const int&c, const int &d) {
+    int face_concat(const int &a, const int &b, const int&c, const int &d) {
       std::string va = std::to_string(a);
       std::string vb = std::to_string(b);
       std::string vc = std::to_string(c);
@@ -192,23 +193,33 @@ struct Face {
       int abcd=stoi(f_abcd);
 
       return abcd;
-  }
+    }
 
-  // function to compute the barycenter for this Face (needed for triangulation output):
+    // function to compute the barycenter for this Face (needed for triangulation output):
+    Point face_baryc(std::vector<Vertex>&vertices, int &a, int &b, int &c, int &d){
 
-  // Point barycenter() {}
+      Vertex baryc;
+
+      baryc.point=(vertices[a].point +vertices[b].point +vertices[c].point +vertices[d].point)/4;
+      Point bar=baryc.point;
+
+      return bar;
+    }
+
+
+    // Point barycenter() {}
 
 
 
 
 
-  //xb = (x1 + x2) / 2
- //yb = (y1 + y2) / 2
+    //xb = (x1 + x2) / 2
+    //yb = (y1 + y2) / 2
 
 };
 
 struct Volume {
-  // a dart incident to this Volume:
-  // ...
+    // a dart incident to this Volume:
+    // ...
 
 };
