@@ -15,7 +15,7 @@ int comp(std::pair<Vertex,int> a,std::pair<Vertex,int> b) {
 }
 
 int main(int argc, const char * argv[]) {
-  std::string file_in = "torus.obj";
+  std::string file_in = "./torus.obj";
   std::string file_out_obj = "torus_triangulated.obj";
   std::string file_out_csv_d = "output_darts.csv";
   std::string file_out_csv_0 = "torus_vertices.csv";
