@@ -1,3 +1,0 @@
-/mnt/d/Geomatics/GEO_1004/test/backup/geo1004_hw1/hw/01/cpp/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/mnt/d/Geomatics/GEO_1004/test/backup/geo1004_hw1/hw/01/cpp/cmake-build-debug/CMakeFiles/edit_cache.dir
-/mnt/d/Geomatics/GEO_1004/test/backup/geo1004_hw1/hw/01/cpp/cmake-build-debug/CMakeFiles/hw01.dir
