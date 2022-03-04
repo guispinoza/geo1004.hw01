@@ -30,7 +30,7 @@ Check and edit the CMakelists.txt, so that it is able to find the libraries of t
     $ ./hw01
   
 ```
-Download with the zip file, extract and run:
+Or you can download with the zip file, extract and run:
 ```
     $ cd https://github.com/guispinoza/geo1004_hw1.git/hw/01/cpp
     $ mkdir build
