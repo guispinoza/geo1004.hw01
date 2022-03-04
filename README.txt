@@ -6,7 +6,7 @@ Authors: Eleni Theodoridou, Guilherme Spinoza Andreo
 ## What does the code do?
 Takes an .obj file as input, parses it and builds the generalised map data structure.
 This is done by looping through each face, making unique IDs using indexes of the elements, then defining the unique darts present in the whole structure. 
-The triangulation is done using the values present in the gmap structure, where new points created using barycenter points for the faces and the edges.  
+The triangulation is done using the values present in the gmap structure, where new points created using barycenter points for the faces and the edges and used to triangulate.  
 
 It is functional for a single volume with faces that are all convex without any holes.
 
@@ -19,7 +19,7 @@ You can use MeshLab software or Blender to visualise the final OBJ file.
 The repository is public and available to be cloned.
 This code was executed using Clion IDE (Build #CL-213.6777.58) 2021.3.3
 
-Check and edit the CMakelists.txt, so that it is able to find the libraries of their relative paths
+Check and edit the CMakelists.txt/Cmake, so that it is able to find the libraries for its relative paths
 
 ```
     $ git clone https://github.com/guispinoza/geo1004_hw1
@@ -29,7 +29,7 @@ Check and edit the CMakelists.txt, so that it is able to find the libraries of t
     $ cmake ..
     $ make
     $ ./hw01
-  
+
 ```
 Download with the zip file, extract and run:
 ```
@@ -39,7 +39,6 @@ Download with the zip file, extract and run:
     $ cmake ..
     $ make
     $ ./hw01
-
 ```
-## Alternative build - You can also open the `cpp` folder directly in the IDE of your choice.
+## Alternative way to build - You can also open the `cpp` folder directly in the IDE of your choice and run the main.cpp.
 If the filepath in the command line 16-23 isn't working, just add the .obj files to the build folder.

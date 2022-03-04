@@ -1,3 +1,4 @@
+// By Eleni Theodoridou & Guilherme Spinoza Andreo
 #pragma once
 
 #include "Point.h"
@@ -9,36 +10,13 @@ struct Edge;
 struct Face;
 struct Volume;
 
-/*
-Below you find the basic elements that you need to build the generalised map.
-The main thing you need to fill out are the links between the elements:
-  * the involutions and cells on the Dart
-  * the darts on the cells
-
-One way to do this is by using pointers. eg. define a member on the dart struct like
-
-  Struct Dart {
-    // involutions:
-    Dart* a0 = nullptr;
-    // ...
-
-    // cells:
-    // ...
-  
-  };
-
-Then you could create and link Darts like:
-  
-  Dart* dart_a = new Dart();
-  Dart* dart_b = new Dart();
-
-  dart_a->a0 = dart_b;
-*/
 
 struct Dart {
 
     int dart_id;
-    // cells:
+    // declaration to store dart's IDs later on
+
+    // Identifiers for cells:
     int v;
     int e;
     int f;
@@ -47,18 +25,12 @@ struct Dart {
     int a1;
     int a2;
     int a3;
-
-
-
 };
 
 struct Vertex {
     // the coordinates of this vertex:
 
     Point point;
-
-
-    //int coords; //to create the unique key for the unordered map by concatenating the xyz
 
     // constructor without arguments
     Vertex() : point(Point())
@@ -67,24 +39,22 @@ struct Vertex {
     // constructor with x,y,z arguments to immediately initialise the point member on this Vertex.
     Vertex(const double &x, const double &y, const double &z) : point(Point(x,y,z)){}
 
-    // a dart incident to this Vertex:
-    int dart_v;
 
-    //function to check for duplicates by converting the coords unique key
+    //function to check for duplicates
     std::string coords_concat(const Point) {
+
+      //converting the x,y,z into strings
       std::string str_x = std::to_string(point.x);
       std::string str_y = std::to_string(point.y);
       std::string str_z = std::to_string(point.z);
 
-      std:: string s_xyz = str_x + str_y + str_z;
+      //concatenate the strings into 1, which will be the unique key
+      std::string s_xyz = str_x + str_y + str_z;
 
-      return s_xyz;
+      return s_xyz; // return the unique xyz string
     }
 
-    int retrieve (const int x){
-
-    }
-
+    //bool operator needed because we created an unordered map that has as a key the struct Vertex
     bool operator==(const Vertex &other) const {
       return (point.x==other.point.x
               && point.y ==other.point.y
@@ -92,6 +62,7 @@ struct Vertex {
     }
 };
 
+//hash function needed because of the use of the Vertex as key in an unordered map, specialize the std::hash template for Vertex
 namespace std {
     template <>
     struct hash<Vertex>
@@ -115,63 +86,39 @@ struct Edge {
     int end;
 
 
-//    bool operator==(const Edge &other) const {
-//        return (id == other.id
-//                && start == other.start
-//                && end == other.end);
-//    }
-
-
-//namespace std {
-//    template<>
-//    struct hash<Edge> {
-//        std::size_t operator()(const Edge &e) const {
-//            using std::size_t;
-//            using std::hash;
-//            using std::string;
-//
-//            return ((hash<int>()(e.id)
-//                     ^ (hash<int>()(e.start) << 1)) >> 1)
-//                   ^ (hash<int>()(e.end) << 1);
-//        }
-//    }
-//}
-
-
-    // a dart incident to this Edge:
-    //Dart *dart = nullptr;
-
     // function to compute the barycenter for this Edge (needed for triangulation output):
+    Vertex edge_baryc(std::vector<Vertex>&vertices, int &start, int &end){
 
+      Vertex baryc;
 
-    // Point barycenter() {}
+      baryc.point=(vertices[start].point +vertices[end].point)/2;
+      Vertex bar=baryc;
 
-    int concat(const int &start, const int &end) {
+      return bar;
+    }
+
+    // function that creates a string out of the starting and ending point of an edge, to be used as a key in a map
+    std:: string concat(const int &start, const int &end) {
 
       // covert seperately into string
       std::string v1 = std::to_string(start);
       std::string v2 = std::to_string(end);
 
       //concatenate the 2 strings
-      std::string v1_v2 = v1 + v2;
-
-      // convert the string to int
-      int e = stoi(v1_v2);
+      std::string e = v1 + v2;
 
       return e;
     }
 
-    int inv_concat(const int &start, const int &end) {
+    //function that creates the inverse key (end, start) of an edge. to be used to avoid duplicate edges
+    std:: string inv_concat(const int &start, const int &end) {
 
       // covert seperately into string
       std::string v1 = std::to_string(start);
       std::string v2 = std::to_string(end);
 
       //concatenate the 2 strings into the inverse
-      std::string v2_v1 = v2 + v1;
-
-      // convert the string to int
-      int e_inv = stoi(v2_v1);
+      std::string e_inv=v2 + v1;
 
       return e_inv;
     }
@@ -182,7 +129,9 @@ struct Face {
     int a,b,c,d;
     // a dart incident to this Face:
 
-    int face_concat(const int &a, const int &b, const int&c, const int &d) {
+    //creates a unique string of the 4 vertices that create a face. to be used as key in a map
+    std:: string face_concat(const int &a, const int &b, const int&c, const int &d) {
+
       std::string va = std::to_string(a);
       std::string vb = std::to_string(b);
       std::string vc = std::to_string(c);
@@ -190,36 +139,50 @@ struct Face {
 
       std::string f_abcd = va + vb +vc +vd;
 
-      int abcd=stoi(f_abcd);
-
-      return abcd;
+      return f_abcd;
     }
 
     // function to compute the barycenter for this Face (needed for triangulation output):
-    Point face_baryc(std::vector<Vertex>&vertices, int &a, int &b, int &c, int &d){
+    Vertex face_baryc(std::vector<Vertex>&vertices, int &a, int &b, int &c, int &d){
 
       Vertex baryc;
 
       baryc.point=(vertices[a].point +vertices[b].point +vertices[c].point +vertices[d].point)/4;
-      Point bar=baryc.point;
+      Vertex bar=baryc;
 
       return bar;
     }
-
-
-    // Point barycenter() {}
-
-
-
-
-
-    //xb = (x1 + x2) / 2
-    //yb = (y1 + y2) / 2
-
 };
 
 struct Volume {
-    // a dart incident to this Volume:
-    // ...
-
+    int a,b;
 };
+
+//new structure that is used for the triangulation. we define a face/dart that is created by 3 vertices
+struct Tri_faces {
+    int a, b, c;
+
+    //bool operator needed because we created an unordered map that has as a key the struct Tri_faces
+    bool operator==(const Tri_faces &other) const {
+      return (a == other.a
+              && b == other.b
+              && c == other.c);
+    }
+};
+
+//hash function needed because of the use of the Vertex as key in an unordered map, specialize the std::hash template for Tri_faces
+namespace std {
+    template<>
+    struct hash< Tri_faces> {
+        std::size_t operator()(const  Tri_faces &e) const {
+          using std::size_t;
+          using std::hash;
+          using std::string;
+
+          return ((hash<int>()(e.a)
+                   ^ (hash<int>()(e.b) << 1)) >> 1)
+                 ^ (hash<int>()(e.c) << 1);
+        }
+    };
+}
+
